@@ -1,3 +1,3 @@
+require('dotenv').config();
 
-
-console.log('Hello World!');
+console.log('Hello World!', process.env);
