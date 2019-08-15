@@ -46,9 +46,9 @@ function sendSMS({cellphone, message, subject}) {
 
 function main() {
     const params = {
-        cellphone: argv['cellphone'].toString(),
-        message: argv['message'],
-        subject: argv['subject'],
+        cellphone: argv['cellphone'] ? argv['cellphone'].toString() : undefined,
+        message: argv['message'] ? argv['message'].toString() : undefined,
+        subject: argv['subject'] ? argv['subject'].toString() : undefined,
     };
     if (isParametersOkay(params)) {
         sendSMS(params);
