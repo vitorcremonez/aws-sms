@@ -19,14 +19,39 @@ function isParametersOkay({cellphone, message, subject}) {
     return success;
 }
 
+function sendSMS({cellphone, message, subject}) {
+    let params = {
+        PhoneNumber: cellphone,
+        Message: message,
+        MessageAttributes: {
+            'AWS.SNS.SMS.SenderID': {
+                'DataType': 'String',
+                'StringValue': subject,
+            }
+        }
+    };
+    let publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
+    publishTextPromise.then((data) => {
+        const response = JSON.stringify({
+            messageId: data.MessageId
+        });
+        console.log(response);
+    }).catch((error) => {
+        const response = JSON.stringify({
+            error: error,
+        });
+        console.log(response);
+    });
+}
+
 function main() {
     const params = {
-        cellphone: argv['cellphone'],
+        cellphone: argv['cellphone'].toString(),
         message: argv['message'],
         subject: argv['subject'],
     };
     if (isParametersOkay(params)) {
-        console.log('vai la');
+        sendSMS(params);
     }
 }
 
