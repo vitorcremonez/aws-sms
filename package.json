@@ -1,0 +1,11 @@
+{
+  "name": "aws-sms",
+  "version": "1.0.0",
+  "description": "Send SMS with Simple Notification Service from Amazon Web Service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
