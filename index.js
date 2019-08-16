@@ -1,21 +1,14 @@
 let AWS = require('aws-sdk');
 let argv = require('minimist')(process.argv.slice(2));
-require('dotenv').config();
 
-function isParametersOkay({cellphone, message, subject}) {
+function isParametersOkay(params) {
     let success = true;
-    if (!cellphone) {
-        console.error('Is missing parameters --cellphone');
-        success = false;
-    }
-    if (!message) {
-        console.error('Is missing parameters --message');
-        success = false;
-    }
-    if (!subject) {
-        console.error('Is missing parameters --subject');
-        success = false;
-    }
+    Object.keys(params).map((key) => {
+        if (!params[key]) {
+            console.log(`Is missing parameters --${key}`);
+            success = false;
+        }
+    });
     return success;
 }
 
@@ -44,13 +37,23 @@ function sendSMS({cellphone, message, subject}) {
     });
 }
 
+function setEnvParams({accessKeyId, secretAccessKey, region}) {
+    process.env.AWS_ACCESS_KEY_ID = accessKeyId;
+    process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
+    process.env.AWS_REGION = region;
+}
+
 function main() {
     const params = {
         cellphone: argv['cellphone'] ? argv['cellphone'].toString() : undefined,
         message: argv['message'] ? argv['message'].toString() : undefined,
         subject: argv['subject'] ? argv['subject'].toString() : undefined,
+        accessKeyId: argv['accessKeyId'] ? argv['accessKeyId'].toString() : undefined,
+        secretAccessKey: argv['secretAccessKey'] ? argv['secretAccessKey'].toString() : undefined,
+        region: argv['region'] ? argv['region'].toString() : undefined,
     };
     if (isParametersOkay(params)) {
+        setEnvParams(params);
         sendSMS(params);
     }
 }
